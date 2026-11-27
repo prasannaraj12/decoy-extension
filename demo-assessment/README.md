@@ -5,9 +5,10 @@ This repository is a **teaching fixture for the Decoy hackathon project**. It im
 harmless: nothing is sent over the network, no files outside this folder are read, and the
 "stolen" value is a fake `DEMO_API_KEY`. The company, people and contact details in the demo are fictional.
 
-**You don't need to run this.** Paste this repository's URL into Decoy's *Repository* box, which reads the
-files without running them. If you do run `npm install`, it prints a `[DECOY DEMO]` line and does nothing
-else. As with any code from a stranger, a VM or container is the safer place to try it.
+**Do not run `npm install`, `npm start` or any file in this repository.** To try the demo, paste this
+repository's URL into Decoy's *Repository* box: Decoy reads the files without running them. Scanning is all
+the demo needs. The steps below are the attacker's script, shown here only so you can see what a victim is
+told to do.
 
 ---
 
