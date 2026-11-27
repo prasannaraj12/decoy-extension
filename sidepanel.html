@@ -2,43 +2,123 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Decoy</title>
 <style>
-  :root { --bg:#0f1115; --card:#181b22; --line:#2a2f3a; --text:#e7e9ee; --muted:#8b93a5; --accent:#7aa2ff;
-          --crit:#ff5c5c; --high:#ff9f43; --med:#f7d154; --ok:#3ecf8e; }
+  :root {
+    --bg:#f7f5f0; --surface:#ffffff; --sunken:#f1eee7; --line:#e4dfd4; --line-strong:#cfc8b9;
+    --text:#14213d; --text-2:#4a5672; --muted:#6b7488;
+    --navy:#1b2d55; --navy-hover:#24396b; --on-navy:#ffffff; --focus:#3b5bdb;
+    --crit:#b42318; --crit-bg:#fdf0ee; --crit-line:#f1c7c1;
+    --warn:#a15c07; --warn-bg:#fdf6e9; --warn-line:#efd8ad;
+    --ok:#1a7f4b;   --ok-bg:#eef7f1;   --ok-line:#c6e4d2;
+    --info:#2f4b8a; --info-bg:#eef2fa; --info-line:#cfd9ef;
+    --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#12151c; --surface:#1a1e27; --sunken:#151820; --line:#2a303c; --line-strong:#3a4252;
+      --text:#e9ecf2; --text-2:#b7bfce; --muted:#8c95a8;
+      --navy:#c9d6f5; --navy-hover:#dbe4fa; --on-navy:#12151c; --focus:#8fa8ef;
+      --crit:#ff8b7e; --crit-bg:#2a1715; --crit-line:#5a2a25;
+      --warn:#f0b75e; --warn-bg:#2a2114; --warn-line:#5a4520;
+      --ok:#6fd39c;   --ok-bg:#142519;   --ok-line:#24503a;
+      --info:#9fb6ec; --info-bg:#161d2c; --info-line:#2c3a5c;
+    }
+  }
   * { box-sizing: border-box; }
-  body { margin:0; font: 13px/1.45 system-ui, sans-serif; background:var(--bg); color:var(--text); }
-  header { padding:14px 16px 6px; } header h1 { margin:0; font-size:18px; } header p { margin:2px 0 0; color:var(--muted); }
-  section { background:var(--card); border:1px solid var(--line); border-radius:10px; margin:10px 12px; padding:12px; }
-  h2 { font-size:13px; margin:0 0 8px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
-  textarea, input { width:100%; background:#0b0d11; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px; font:inherit; }
-  textarea { min-height:90px; resize:vertical; }
-  button { background:var(--accent); color:#0b0d11; border:0; border-radius:6px; padding:7px 12px; font-weight:600; cursor:pointer; margin:6px 6px 0 0; }
-  button.ghost { background:transparent; color:var(--accent); border:1px solid var(--accent); }
-  button:disabled { opacity:.5; cursor:default; }
-  .row { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
-  .badge { display:inline-block; padding:1px 7px; border-radius:99px; font-size:11px; font-weight:700; }
-  .on_device { background:#1d3b2e; color:var(--ok); } .in_cloud { background:#1d2a4a; color:var(--accent); }
-  .rules { background:#2c2c2c; color:#ccc; } .unknown { background:#3a2a2a; color:#f99; }
-  .critical { color:var(--crit); } .high { color:var(--high); } .medium { color:var(--med); } .low { color:var(--muted); }
-  .finding { border-top:1px solid var(--line); padding:8px 0; } .finding code { display:block; white-space:pre-wrap; word-break:break-all; background:#0b0d11; padding:6px; border-radius:4px; margin:4px 0; font-size:12px; }
-  .ai { white-space:pre-wrap; background:#11151c; border-left:3px solid var(--accent); padding:8px; margin-top:8px; border-radius:4px; }
-  .muted { color:var(--muted); } pre { white-space:pre-wrap; word-break:break-word; font-size:12px; background:#0b0d11; padding:8px; border-radius:6px; max-height:220px; overflow:auto; }
-  .verdict { font-weight:700; font-size:14px; margin:6px 0; }
-  ol.timeline { list-style:none; padding:0; margin:0; } ol.timeline li { border-left:2px solid var(--line); padding:4px 0 8px 12px; position:relative; }
-  ol.timeline li::before { content:""; position:absolute; left:-6px; top:8px; width:10px; height:10px; border-radius:50%; background:var(--accent); }
-  ol.timeline li.link::before { background:var(--crit); }
+  body { margin:0; font:13px/1.5 system-ui, "Segoe UI", sans-serif; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; }
+
+  /* Header */
+  header { display:flex; align-items:center; gap:10px; padding:14px 14px 10px; border-bottom:1px solid var(--line); background:var(--surface); }
+  header svg { flex:none; color:var(--navy); }
+  header h1 { margin:0; font-size:16px; font-weight:700; letter-spacing:-.01em; }
+  header p { margin:0; font-size:12px; color:var(--muted); }
+
+  /* Sections */
+  main { padding:4px 0 16px; }
+  section { background:var(--surface); border:1px solid var(--line); border-radius:8px; margin:10px 12px 0; padding:12px; }
+  h2 { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:0 0 10px; font-size:13px; font-weight:650; color:var(--text); }
+  h2 .step { display:inline-grid; place-items:center; width:18px; height:18px; border-radius:50%; background:var(--navy); color:var(--on-navy); font-size:11px; font-weight:700; }
+  h2 .badge { margin-left:auto; }
+  .hint { margin:-4px 0 8px; font-size:12px; color:var(--muted); }
+
+  /* Controls */
+  textarea, input { width:100%; display:block; background:var(--surface); color:var(--text); border:1px solid var(--line-strong); border-radius:6px; padding:8px 10px; font:inherit; }
+  textarea { min-height:92px; resize:vertical; }
+  input + button, textarea + input { margin-top:6px; }
+  textarea:focus, input:focus, button:focus-visible { outline:2px solid var(--focus); outline-offset:1px; }
+  ::placeholder { color:var(--muted); }
+  button { background:var(--navy); color:var(--on-navy); border:1px solid var(--navy); border-radius:6px; padding:6px 12px; font:inherit; font-weight:600; cursor:pointer; margin:8px 6px 0 0; }
+  button:hover:not(:disabled) { background:var(--navy-hover); border-color:var(--navy-hover); }
+  button.ghost { background:transparent; color:var(--navy); border-color:var(--line-strong); }
+  button.ghost:hover:not(:disabled) { background:var(--sunken); border-color:var(--navy); color:var(--navy); }
+  button:disabled { opacity:.55; cursor:default; }
+  .row { display:flex; gap:6px; flex-wrap:wrap; } .row button { margin-right:0; }
+
+  /* AI status */
+  .status { display:flex; align-items:baseline; gap:6px; }
+  .status b { font-weight:650; }
+  #nanoProgress { font-size:12px; margin-top:2px; }
+  #testOut:empty { display:none; }
+
+  /* Badges */
+  .badge { display:inline-block; padding:1px 8px; border-radius:99px; font-size:11px; font-weight:600; border:1px solid transparent; white-space:nowrap; }
+  .on_device { background:var(--ok-bg); color:var(--ok); border-color:var(--ok-line); }
+  .in_cloud { background:var(--info-bg); color:var(--info); border-color:var(--info-line); }
+  .rules { background:var(--sunken); color:var(--text-2); border-color:var(--line); }
+  .unknown { background:var(--warn-bg); color:var(--warn); border-color:var(--warn-line); }
+
+  /* Severity text */
+  .critical { color:var(--crit); } .high { color:var(--crit); } .medium { color:var(--warn); } .low { color:var(--text-2); }
+
+  /* Verdicts and assessments */
+  .verdict { margin:12px 0 4px; padding:7px 10px; border-radius:6px; border:1px solid var(--line); border-left-width:4px; font-weight:700; font-size:13.5px; background:var(--sunken); color:var(--text); }
+  .verdict.critical { background:var(--crit-bg); border-color:var(--crit-line); border-left-color:var(--crit); color:var(--crit); }
+  .verdict.high, .verdict.medium { background:var(--warn-bg); border-color:var(--warn-line); border-left-color:var(--warn); color:var(--warn); }
+  /* Low concern and "no known indicators" are not proof of safety, so they are neutral, not green. */
+  .verdict.low { background:var(--sunken); border-color:var(--line); border-left-color:var(--navy); color:var(--text); }
+  #msgAssess p, #msgAssess ul { margin:6px 0; color:var(--text-2); } #msgAssess ul { padding-left:18px; } #msgAssess p.muted { font-size:12px; color:var(--muted); }
+
+  /* Findings */
+  .finding { border-top:1px solid var(--line); padding:9px 0 8px; }
+  .finding:first-child { border-top:0; }
+  .finding > b { font-weight:650; }
+  .finding .muted { font-size:12px; }
+  .finding code { display:block; white-space:pre-wrap; word-break:break-word; background:var(--sunken); border:1px solid var(--line); padding:6px 8px; border-radius:4px; margin:5px 0; font:12px/1.45 var(--mono); color:var(--text); }
+
+  /* AI explanation */
+  .ai { white-space:pre-wrap; background:var(--sunken); border:1px solid var(--line); border-left:3px solid var(--navy); padding:8px 10px; margin-top:10px; border-radius:6px; color:var(--text); }
+  .ai .badge { margin-right:4px; }
+
+  .muted { color:var(--muted); }
+  pre { white-space:pre-wrap; word-break:break-word; font:12px/1.45 var(--mono); background:var(--sunken); border:1px solid var(--line); padding:8px 10px; border-radius:6px; max-height:240px; overflow:auto; color:var(--text); }
+  #cloudPreview p { color:var(--text-2); }
+
+  /* Timeline */
+  ol.timeline { list-style:none; padding:0 0 0 4px; margin:0; }
+  ol.timeline li { border-left:2px solid var(--line); padding:2px 0 10px 14px; position:relative; color:var(--text); }
+  ol.timeline li:last-child { padding-bottom:2px; }
+  ol.timeline li::before { content:""; position:absolute; left:-6px; top:6px; width:10px; height:10px; border-radius:50%; background:var(--surface); border:2px solid var(--navy); }
+  ol.timeline li.link::before { background:var(--crit); border-color:var(--crit); }
+  ol.timeline li.muted::before { border-color:var(--line-strong); }
+  ol.timeline li > .muted:first-child { font-size:11.5px; font-variant-numeric:tabular-nums; }
+
 </style>
 </head>
 <body>
 <header>
-  <h1>Decoy</h1>
-  <p>Detect the deception before you execute it.</p>
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 4.5 5.5v6c0 4.6 3.1 8.6 7.5 10 4.4-1.4 7.5-5.4 7.5-10v-6L12 2.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m8.8 12.2 2.3 2.3 4.2-4.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div>
+    <h1>Decoy</h1>
+    <p>Check it before you run it.</p>
+  </div>
 </header>
 
+<main>
 <section id="hybrid">
-  <h2>Hybrid AI status</h2>
-  <div>On-device Gemini Nano: <b id="nanoStatus">checking…</b></div>
+  <h2>On-device AI</h2>
+  <div class="status"><span class="muted">Gemini Nano:</span> <b id="nanoStatus">checking…</b></div>
   <div id="nanoProgress" class="muted"></div>
   <div class="row">
     <button id="prepNano" class="ghost">Prepare on-device model</button>
@@ -49,31 +129,33 @@
 </section>
 
 <section>
-  <h2>1 · Message or instructions <span class="badge on_device">stays on this device</span></h2>
-  <textarea id="msg" placeholder="Paste a message, email or setup instructions — from a recruiter, colleague, IT support or anyone — or select text on any page → right-click → Scan with Decoy"></textarea>
-  <input id="myName" placeholder="Your name (redacted before any cloud request)" style="margin-top:6px" />
+  <h2><span class="step">1</span> Message or instructions <span class="badge on_device">stays on this device</span></h2>
+  <textarea id="msg" placeholder="Paste a message, email or setup instructions — from a recruiter, colleague, IT support or anyone. Or select text on any page, right-click and choose Scan with Decoy."></textarea>
+  <input id="myName" placeholder="Your name (removed before any cloud request)" />
   <button id="scanMsg">Scan message</button>
   <div id="msgOut"></div>
 </section>
 
 <section>
-  <h2>2 · Repository <span class="badge rules">static scan · never executed</span></h2>
+  <h2><span class="step">2</span> Repository <span class="badge rules">read only · never run</span></h2>
   <input id="repo" placeholder="https://github.com/owner/repo" />
   <button id="scanRepo">Scan repository</button>
   <div id="repoOut"></div>
 </section>
 
 <section>
-  <h2>3 · Attack-chain timeline</h2>
+  <h2><span class="step">3</span> Attack-chain timeline</h2>
   <ol id="timeline" class="timeline"><li class="muted">Nothing yet.</li></ol>
 </section>
 
 <section>
-  <h2>4 · Deeper analysis <span class="badge in_cloud">cloud · only with your consent</span></h2>
+  <h2><span class="step">4</span> Deeper analysis <span class="badge in_cloud">cloud · only with your consent</span></h2>
+  <p class="hint">Shows the exact redacted text first. Source code and the full message are never sent.</p>
   <button id="previewCloud" class="ghost">Preview what would be sent</button>
   <div id="cloudPreview"></div>
   <div id="cloudOut"></div>
 </section>
+</main>
 
 <script type="module" src="/src/sidepanel.ts"></script>
 </body>
