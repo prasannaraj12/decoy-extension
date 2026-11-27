@@ -1,7 +1,7 @@
 {
   "name": "wallet-dashboard-assessment",
   "version": "1.0.0",
-  "description": "SIMULATED malicious assessment for the Decoy demo. Harmless.",
+  "description": "SIMULATED malicious assessment for the Decoy demo. Inert by design. Do not run.",
   "scripts": {
     "postinstall": "node scripts/setup.js",
     "start": "node src/wallet.js"

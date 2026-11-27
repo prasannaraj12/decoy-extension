@@ -1,9 +1,10 @@
-# ⚠️ SIMULATED MALICIOUS ASSESSMENT — HARMLESS DEMO
+# ⚠️ SIMULATED MALICIOUS ASSESSMENT — DO NOT RUN
 
 This repository is a **teaching fixture for the Decoy hackathon project**. It imitates the
-*shape* of a fake "coding assessment" used in recruitment-based attacks, but every payload is
-harmless: nothing is sent over the network, no files outside this folder are read, and the
-"stolen" value is a fake `DEMO_API_KEY`. The company, people and contact details in the demo are fictional.
+*shape* of a fake "coding assessment" used in recruitment-based attacks. It is designed to be inert: the
+install script's code sits inside a function that nothing calls, its network call is disabled and points
+at an `.invalid` address that can't resolve, and the "secret" it looks for is a fake `DEMO_API_KEY`.
+Treat it like any untrusted code all the same. The company, people and contact details in the demo are fictional.
 
 **Do not run `npm install`, `npm start` or any file in this repository.** To try the demo, paste this
 repository's URL into Decoy's *Repository* box: Decoy reads the files without running them. Scanning is all

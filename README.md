@@ -154,7 +154,9 @@ Decoy reduces risk; it does not guarantee safety or complete privacy.
 
 ## Demo fixture
 
-`demo-assessment/` is a **harmless simulated** malicious coding assessment, together with a sample recruiter message. It is published separately as `prasannaraj12/decoy-demo-assessment`, which the sample message links to. The company and contact details are fictional. It makes no network calls (the endpoint is `.invalid` and disabled), and its "secret" is a fake `DEMO_API_KEY`.
+`demo-assessment/` is a **simulated** malicious coding assessment, together with a sample recruiter message. It is published separately as `prasannaraj12/decoy-demo-assessment`, which the sample message links to. The company and contact details are fictional.
+
+It is designed to be inert: the install script's code sits inside a function that nothing calls, its network call is disabled and points at an `.invalid` address, and its "secret" is a fake `DEMO_API_KEY`. **Do not run it** (`npm install`, `npm start` or any file). Scanning its URL in Decoy is all the demo needs.
 
 Decoy is inspired by reported recruitment-based attacks on crypto and tech companies. The demo is a simulated scenario, not a reconstruction of any specific incident.
 
