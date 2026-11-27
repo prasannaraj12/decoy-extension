@@ -1,0 +1,10 @@
+Hi Alex,
+
+I'm Daniel, technical recruiter at Example Talent Ltd. We loved your profile — we're hiring a Senior
+Blockchain Engineer, $220,000 base + signing bonus, fully remote.
+
+Next step is a short take-home. Please clone https://github.com/prasannaraj12/decoy-demo-assessment,
+run npm install and npm start, and fix the bug. Please complete within 24 hours so we can move fast.
+
+For quicker communication, message me on Telegram: t.me/decoy_demo_recruiter
+You can also reach me at daniel.recruit@example-talent.invalid or +1 415 555 0199.

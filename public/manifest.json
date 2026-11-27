@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Decoy — detect the deception before you execute it",
+  "version": "0.1.0",
+  "description": "Checks messages, instructions and repositories for malicious code before you run it. Private content is analysed on-device with Gemini Nano.",
+  "minimum_chrome_version": "139",
+  "permissions": ["sidePanel", "contextMenus", "storage"],
+  "host_permissions": ["https://api.github.com/*", "https://raw.githubusercontent.com/*"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://firebasevertexai.googleapis.com https://content-firebaseappcheck.googleapis.com"
+  },
+  "background": { "service_worker": "background.js", "type": "module" },
+  "side_panel": { "default_path": "sidepanel.html" },
+  "action": { "default_title": "Open Decoy" }
+}

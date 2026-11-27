@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Decoy</title>
+<style>
+  :root { --bg:#0f1115; --card:#181b22; --line:#2a2f3a; --text:#e7e9ee; --muted:#8b93a5; --accent:#7aa2ff;
+          --crit:#ff5c5c; --high:#ff9f43; --med:#f7d154; --ok:#3ecf8e; }
+  * { box-sizing: border-box; }
+  body { margin:0; font: 13px/1.45 system-ui, sans-serif; background:var(--bg); color:var(--text); }
+  header { padding:14px 16px 6px; } header h1 { margin:0; font-size:18px; } header p { margin:2px 0 0; color:var(--muted); }
+  section { background:var(--card); border:1px solid var(--line); border-radius:10px; margin:10px 12px; padding:12px; }
+  h2 { font-size:13px; margin:0 0 8px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  textarea, input { width:100%; background:#0b0d11; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px; font:inherit; }
+  textarea { min-height:90px; resize:vertical; }
+  button { background:var(--accent); color:#0b0d11; border:0; border-radius:6px; padding:7px 12px; font-weight:600; cursor:pointer; margin:6px 6px 0 0; }
+  button.ghost { background:transparent; color:var(--accent); border:1px solid var(--accent); }
+  button:disabled { opacity:.5; cursor:default; }
+  .row { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .badge { display:inline-block; padding:1px 7px; border-radius:99px; font-size:11px; font-weight:700; }
+  .on_device { background:#1d3b2e; color:var(--ok); } .in_cloud { background:#1d2a4a; color:var(--accent); }
+  .rules { background:#2c2c2c; color:#ccc; } .unknown { background:#3a2a2a; color:#f99; }
+  .critical { color:var(--crit); } .high { color:var(--high); } .medium { color:var(--med); } .low { color:var(--muted); }
+  .finding { border-top:1px solid var(--line); padding:8px 0; } .finding code { display:block; white-space:pre-wrap; word-break:break-all; background:#0b0d11; padding:6px; border-radius:4px; margin:4px 0; font-size:12px; }
+  .ai { white-space:pre-wrap; background:#11151c; border-left:3px solid var(--accent); padding:8px; margin-top:8px; border-radius:4px; }
+  .muted { color:var(--muted); } pre { white-space:pre-wrap; word-break:break-word; font-size:12px; background:#0b0d11; padding:8px; border-radius:6px; max-height:220px; overflow:auto; }
+  .verdict { font-weight:700; font-size:14px; margin:6px 0; }
+  ol.timeline { list-style:none; padding:0; margin:0; } ol.timeline li { border-left:2px solid var(--line); padding:4px 0 8px 12px; position:relative; }
+  ol.timeline li::before { content:""; position:absolute; left:-6px; top:8px; width:10px; height:10px; border-radius:50%; background:var(--accent); }
+  ol.timeline li.link::before { background:var(--crit); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Decoy</h1>
+  <p>Detect the deception before you execute it.</p>
+</header>
+
+<section id="hybrid">
+  <h2>Hybrid AI status</h2>
+  <div>On-device Gemini Nano: <b id="nanoStatus">checking…</b></div>
+  <div id="nanoProgress" class="muted"></div>
+  <div class="row">
+    <button id="prepNano" class="ghost">Prepare on-device model</button>
+    <button id="testLocal" class="ghost">Test on-device</button>
+    <button id="testCloud" class="ghost">Test cloud</button>
+  </div>
+  <div id="testOut" class="muted"></div>
+</section>
+
+<section>
+  <h2>1 · Message or instructions <span class="badge on_device">stays on this device</span></h2>
+  <textarea id="msg" placeholder="Paste a message, email or setup instructions — from a recruiter, colleague, IT support or anyone — or select text on any page → right-click → Scan with Decoy"></textarea>
+  <input id="myName" placeholder="Your name (redacted before any cloud request)" style="margin-top:6px" />
+  <button id="scanMsg">Scan message</button>
+  <div id="msgOut"></div>
+</section>
+
+<section>
+  <h2>2 · Repository <span class="badge rules">static scan · never executed</span></h2>
+  <input id="repo" placeholder="https://github.com/owner/repo" />
+  <button id="scanRepo">Scan repository</button>
+  <div id="repoOut"></div>
+</section>
+
+<section>
+  <h2>3 · Attack-chain timeline</h2>
+  <ol id="timeline" class="timeline"><li class="muted">Nothing yet.</li></ol>
+</section>
+
+<section>
+  <h2>4 · Deeper analysis <span class="badge in_cloud">cloud · only with your consent</span></h2>
+  <button id="previewCloud" class="ghost">Preview what would be sent</button>
+  <div id="cloudPreview"></div>
+  <div id="cloudOut"></div>
+</section>
+
+<script type="module" src="/src/sidepanel.ts"></script>
+</body>
+</html>
